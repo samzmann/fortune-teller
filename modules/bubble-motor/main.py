@@ -31,13 +31,16 @@ while True:
 
     move()
 
-    dC(10000)
+    dC(20000)
+    utime.sleep_ms(1000)
+
+    dC(30000)
+    utime.sleep_ms(1000)
+
+    dC(000)
     utime.sleep_ms(1000)
 
     dC(25000)
-    utime.sleep_ms(1000)
-
-    dC(35000)
     utime.sleep_ms(1000)
 
     stop()
