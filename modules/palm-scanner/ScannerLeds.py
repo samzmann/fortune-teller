@@ -3,6 +3,7 @@ import neopixel
 import time
 import threading
 import math
+import random
 import colorsys
 
 # Taken from https://learn.adafruit.com/led-tricks-gamma-correction/the-quick-fix
@@ -19,7 +20,7 @@ class ScannerLeds:
     NUM_PIXELS = 10
     isAnimating = False
 
-    def __init__(self, name):
+    def __init__(self):
 
         self.pixels = neopixel.NeoPixel(
             board.D10,
@@ -30,6 +31,32 @@ class ScannerLeds:
 
         self.pixels.fill((0,0,0))
         self.pixels.show()
+
+    def flickerAnim(self):
+        self.pixels.fill((60, 10,0))
+        self.pixels.show()
+
+        MIN_INTERVAL = 50
+        MAX_ON_INTERVAL_MS = 2000
+        MAX_OFF_INTERVAL_MS = 500
+
+        nextChangeTimestamp = getMillis()
+        isOn = 1
+
+        while self.isAnimating:
+            now = getMillis()
+
+            if now > nextChangeTimestamp:
+                if isOn:
+                    nextChangeTimestamp = now + random.randint(MIN_INTERVAL,MAX_OFF_INTERVAL_MS)
+                    isOn = 0
+                else:
+                    nextChangeTimestamp = now + random.randint(MIN_INTERVAL,MAX_ON_INTERVAL_MS)
+                    isOn = 1
+
+                self.pixels.brightness = isOn
+                self.pixels.show()
+            
 
     def scanAnim(self):
         PIXEL_ON_DURATION_MS = 75
