@@ -151,6 +151,11 @@ class ScannerLeds:
                 self.pixels.fill((r,g,b))
                 self.pixels.show()
 
+    def startFlickerAnim(self):
+        self.isAnimating = True
+        self.animThread = threading.Thread(target=self.flickerAnim)
+        self.animThread.start()
+
     def startScanAnim(self):
         self.isAnimating = True
         self.animThread = threading.Thread(target=self.scanAnim)
