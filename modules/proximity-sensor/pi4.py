@@ -8,7 +8,7 @@ DISTANCE_CUTOFF_CM = 10 # 10 centimeters
 
 class ProximitySensor:
 
-    def __init__(self, onDetect: function) -> None:
+    def __init__(self, onDetect) -> None:
 
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(PIN_TRIGGER, GPIO.OUT)
@@ -45,11 +45,8 @@ class ProximitySensor:
             
             distance = round(distance, 2)
 
+            print("Distance: ",distance,"cm")
+
             if distance <= DISTANCE_CUTOFF_CM:
                 self.onDetect()
                 isDetecting = False
-
-            
-            print("Distance: ",distance,"cm")
-
-proximitySensor = ProximitySensor()
