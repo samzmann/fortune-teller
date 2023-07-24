@@ -1,7 +1,7 @@
 import transitions
 from enum import Enum, auto
 
-import ProximitySensor
+from ProximitySensor import ProximitySensor
 
 class States(str, Enum):
     IDLE = 'IDLE'
@@ -31,13 +31,11 @@ class PalmReader:
             transitions=stateTransitions,
             initial=States.IDLE
             )
-        
-        self.on_enter_DETECTING('startProximitySensor')
     
-    def startProximitySensor(self):
+    def on_enter_DETECTING(self):
         def onDetect():
             self.trigger(Events.detectHand)            
-        self.proximitySensor.starstartDetect(onDetect)
+        self.proximitySensor.startDetect(onDetect)
     
 
 
