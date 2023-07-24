@@ -33,6 +33,9 @@ class PalmReader:
             transitions=stateTransitions,
             initial=States.IDLE
             )
+    
+        # Must call the on_enter_IDLE callback manually because it does not fire on Machine init
+        self.on_enter_IDLE()
   
     def on_exit_IDLE(self):
         self.scannerLeds.stopAnim()
@@ -43,10 +46,11 @@ class PalmReader:
     def on_exit_SCANNING(self):
         self.scannerLeds.stopAnim()
     
-    # Will automatically trigger when the machine enters DETECTING state
-    def on_enter_DETECTING(self):
+    def on_enter_IDLE(self):
         self.scannerLeds.startBreathAnim()
 
+    def on_enter_DETECTING(self):
+        self.scannerLeds.startBreathAnim()
         def onDetect():
             self.trigger(Events.detectHand)            
         self.proximitySensor.startDetect(onDetect)

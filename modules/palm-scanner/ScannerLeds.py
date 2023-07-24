@@ -36,9 +36,9 @@ class ScannerLeds:
         self.pixels.fill((60, 10,0))
         self.pixels.show()
 
-        MIN_INTERVAL = 50
-        MAX_ON_INTERVAL_MS = 2000
-        MAX_OFF_INTERVAL_MS = 500
+        MIN_INTERVAL = 10
+        MAX_ON_INTERVAL_MS = 1000
+        MAX_OFF_INTERVAL_MS = 50
 
         nextChangeTimestamp = getMillis()
         isOn = 1
