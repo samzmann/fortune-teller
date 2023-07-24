@@ -47,7 +47,7 @@ class PalmReader:
         self.scannerLeds.stopAnim()
     
     def on_enter_IDLE(self):
-        self.scannerLeds.startBreathAnim()
+        self.scannerLeds.startFlickerAnim()
 
     def on_enter_DETECTING(self):
         self.scannerLeds.startBreathAnim()
