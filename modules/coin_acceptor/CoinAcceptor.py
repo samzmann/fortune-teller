@@ -1,18 +1,10 @@
 import RPi.GPIO as GPIO
 from threading import Timer
-from lcd import drivers
+# from lcd import drivers
 
-GPIO.setmode(GPIO.BCM)
-COIN_PIN = 21 # Physical Pin 40
-GPIO.setup(
-    COIN_PIN,
-    GPIO.IN,
-    pull_up_down=GPIO.PUD_UP
-    )
-
-display = drivers.Lcd()
-display.lcd_display_string(f"Add coins to", 1)
-display.lcd_display_string(f"start", 2)
+# display = drivers.Lcd()
+# display.lcd_display_string(f"Add coins to", 1)
+# display.lcd_display_string(f"start", 2)
 
 class CoinAcceptor:
     
@@ -23,7 +15,12 @@ class CoinAcceptor:
     timerObj = None
 
     def __init__(self) -> None:
-        print('hi')      
+
+        COIN_PIN = 21 # Physical Pin 40
+        
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(COIN_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
         GPIO.add_event_detect(COIN_PIN, GPIO.FALLING)
         GPIO.add_event_callback(COIN_PIN, self.onPulseReceived)
 
@@ -37,9 +34,11 @@ class CoinAcceptor:
             print("50 Cents")
 
         self.numImpulses = 0
+        
+        print(f"Credit: {self.totalAmount}", 1)
 
-        display.lcd_clear()
-        display.lcd_display_string(f"Credit: {self.totalAmount}", 1)
+        # display.lcd_clear()
+        # display.lcd_display_string(f"Credit: {self.totalAmount}", 1)
 
     def onPulseReceived(self, pin):
 
