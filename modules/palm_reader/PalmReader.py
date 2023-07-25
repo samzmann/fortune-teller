@@ -6,10 +6,12 @@ from .ScannerLeds import ScannerLeds
 
 class States(str, Enum):
     IDLE = 'IDLE'
+    PAUSED = 'PAUSED'
     DETECTING = 'DETECTING'
     SCANNING = 'SCANNING'
 
 class Events(str, Enum):
+    pause = 'pause'
     enableProxSensor = 'enableProxSensor'
     detectHand = 'detectHand'
     reset = 'reset'
@@ -24,7 +26,8 @@ class PalmReader:
         self.onDetectPalm = onDetectPalm
 
         stateTransitions = [
-            [Events.enableProxSensor, States.IDLE, States.DETECTING],
+            [Events.pause, States.IDLE, States.PAUSED],
+            [Events.enableProxSensor, States.PAUSED, States.DETECTING],
             [Events.detectHand, States.DETECTING,States.SCANNING,],
             [Events.reset,States.SCANNING,States.IDLE]
             ]

@@ -52,6 +52,7 @@ class FortunerTeller:
         self.lcdDisplay.writeLine2('')
     
     def on_enter_ADDING_CREDIT(self):
+        self.palmReader.pause()
         self.coinAcceptor.enable()
         self.lcdDisplay.writeLine1('Add coins to')
         self.lcdDisplay.writeLine2('start...')
