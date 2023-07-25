@@ -66,6 +66,10 @@ class CoinAcceptor:
 
     def onPulseReceived(self, pin):
 
+        # Ignore pulses if CoinAcceptor is not enabled
+        if self.is_ENABLED() == False:
+            return
+
         if self.timerObj != None and self.timerObj.is_alive:
                 self.timerObj.cancel()
 
