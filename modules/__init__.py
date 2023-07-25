@@ -1,0 +1,1 @@
+all = ["coin_acceptor", "palm_scanner"]
