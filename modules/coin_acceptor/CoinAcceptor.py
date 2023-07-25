@@ -1,3 +1,5 @@
+import transitions
+from enum import Enum
 import RPi.GPIO as GPIO
 from threading import Timer
 # from lcd import drivers
@@ -5,6 +7,14 @@ from threading import Timer
 # display = drivers.Lcd()
 # display.lcd_display_string(f"Add coins to", 1)
 # display.lcd_display_string(f"start", 2)
+
+class States(str, Enum):
+    DISABLED = 'DISABLED'
+    ENABLED = 'ENABLED'
+
+class Events(str, Enum):
+    enable = 'enable'
+    disable = 'disable'
 
 class CoinAcceptor:
     
@@ -14,7 +24,9 @@ class CoinAcceptor:
 
     timerObj = None
 
-    def __init__(self) -> None:
+    def __init__(self, onAddCredit) -> None:
+
+        self.onAddCredit = onAddCredit
 
         COIN_PIN = 21 # Physical Pin 40
         
@@ -24,18 +36,30 @@ class CoinAcceptor:
         GPIO.add_event_detect(COIN_PIN, GPIO.FALLING)
         GPIO.add_event_callback(COIN_PIN, self.onPulseReceived)
 
+        stateTransitions = [
+            [Events.enable, States.DISABLED, States.ENABLED],
+            [Events.disable, States.ENABLED, States.DISABLED]
+            ]
+
+        self.machine = transitions.Machine(
+            model=self,
+            states=States,
+            transitions=stateTransitions,
+            initial=States.DISABLED
+            )
+
     def registerImpulses(self):
 
+        increment = 0
         if (self.numImpulses == 1):
-            self.totalAmount += 1 # 1 Euro coin
+            increment = 1 # 1 Euro coin
             print("1 Euro")
         elif (self.numImpulses == 2):
-            self.totalAmount += 0.5 # 50 Cents coin
+            increment = 0.5 # 50 Cents coin
             print("50 Cents")
 
         self.numImpulses = 0
-
-        print(f"Credit: {self.totalAmount}")
+        self.onAddCredit(increment)
 
         # display.lcd_clear()
         # display.lcd_display_string(f"Credit: {self.totalAmount}", 1)

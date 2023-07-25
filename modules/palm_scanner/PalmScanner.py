@@ -1,5 +1,5 @@
 import transitions
-from enum import Enum, auto
+from enum import Enum
 
 from ProximitySensor import ProximitySensor
 from ScannerLeds import ScannerLeds
