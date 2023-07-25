@@ -5,7 +5,6 @@ from modules.lcd_display.LcdDisplay import LcdDisplay
 from modules.palm_reader.PalmReader import PalmReader
 
 class States(str, Enum):
-    IDLE = 'IDLE'
     ADDING_CREDIT = 'ADDING_CREDIT'
     WAITING_PALM =  'WAITING_PALM'
     READING_FORTUNE = 'READING_FORTUNE'
@@ -26,24 +25,23 @@ class FortunerTeller:
         self.lcdDisplay = LcdDisplay()
 
         stateTransitions = [
-            [Events.toNext, States.IDLE, States.ADDING_CREDIT],
             [Events.toNext, States.ADDING_CREDIT,States.WAITING_PALM],
             [Events.toNext, States.WAITING_PALM,States.READING_FORTUNE,],
-            [Events.reset,States.READING_FORTUNE,States.IDLE]
+            [Events.reset,States.READING_FORTUNE,States.ADDING_CREDIT]
             ]
 
         self.machine = transitions.Machine(
             model=self,
             states=States,
             transitions=stateTransitions,
-            initial=States.IDLE
+            initial=States.ADDING_CREDIT
             )
         
-        self.on_enter_IDLE()
+        self.on_enter_ADDING_CREDIT()
     
-    def on_enter_IDLE(self):
-        self.lcdDisplay.writeLine1('-> Pay $$$')
-        self.lcdDisplay.writeLine2('-> Get Fortune')
+    # def on_enter_IDLE(self):
+    #     self.lcdDisplay.writeLine1('-> Pay $$$')
+    #     self.lcdDisplay.writeLine2('-> Get Fortune')
 
     def addCredit(self, newCredit):
         self.credit += newCredit
@@ -53,6 +51,7 @@ class FortunerTeller:
     
     def on_enter_ADDING_CREDIT(self):
         self.palmReader.pause()
+        self.palmReader.enableProxSensor()
         self.coinAcceptor.enable()
         self.lcdDisplay.writeLine1('Add coins to')
         self.lcdDisplay.writeLine2('start...')

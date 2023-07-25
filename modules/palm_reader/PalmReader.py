@@ -55,7 +55,7 @@ class PalmReader:
         self.scannerLeds.startFlickerAnim()
 
     def on_enter_DETECTING(self):
-        self.scannerLeds.startBreathAnim()    
+        self.scannerLeds.startBreathAnim()
         self.proximitySensor.startDetect(self.onDetectPalm)
     
     def on_enter_SCANNING(self):
