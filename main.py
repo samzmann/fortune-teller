@@ -1,6 +1,7 @@
 import transitions
 from enum import Enum
 from modules.coin_acceptor.CoinAcceptor import CoinAcceptor
+from modules.lcd_display.LcdDisplay import LcdDisplay
 
 class States(str, Enum):
     IDLE = 'IDLE'
@@ -19,6 +20,7 @@ class FortunerTeller:
     def __init__(self) -> None:
 
         self.coinAcceptor = CoinAcceptor(self.addCredit)
+        self.lcdDisplay = LcdDisplay()
 
         stateTransitions = [
             [Events.toAddingCredit, States.IDLE, States.ADDING_CREDIT],
@@ -35,9 +37,14 @@ class FortunerTeller:
 
     def addCredit(self, newCredit):
         self.credit += newCredit
+
+        self.lcdDisplay.writeLine1(f'Money$: {self.credit}')
+        self.lcdDisplay.writeLine2('')
     
     def on_enter_ADDING_CREDIT(self):
         self.coinAcceptor.enable()
+        self.lcdDisplay.writeLine1('Add coins to')
+        self.lcdDisplay.writeLine2('start...')
 
     def on_exit_ADDING_CREDIT(self):
         self.coinAcceptor.disable()

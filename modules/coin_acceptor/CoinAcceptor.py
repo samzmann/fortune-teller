@@ -2,11 +2,6 @@ import transitions
 from enum import Enum
 import RPi.GPIO as GPIO
 from threading import Timer
-# from lcd import drivers
-
-# display = drivers.Lcd()
-# display.lcd_display_string(f"Add coins to", 1)
-# display.lcd_display_string(f"start", 2)
 
 class States(str, Enum):
     DISABLED = 'DISABLED'
@@ -60,9 +55,6 @@ class CoinAcceptor:
 
         self.numImpulses = 0
         self.onAddCredit(increment)
-
-        # display.lcd_clear()
-        # display.lcd_display_string(f"Credit: {self.totalAmount}", 1)
 
     def onPulseReceived(self, pin):
 

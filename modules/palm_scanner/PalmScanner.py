@@ -1,8 +1,8 @@
 import transitions
 from enum import Enum
 
-from ProximitySensor import ProximitySensor
-from ScannerLeds import ScannerLeds
+from .ProximitySensor import ProximitySensor
+from .ScannerLeds import ScannerLeds
 
 class States(str, Enum):
     IDLE = 'IDLE'
