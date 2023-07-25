@@ -19,7 +19,9 @@ class PalmReader:
     proximitySensor = ProximitySensor()
     scannerLeds = ScannerLeds()
     
-    def __init__(self) -> None:
+    def __init__(self, onDetectPalm) -> None:
+
+        self.onDetectPalm = onDetectPalm
 
         stateTransitions = [
             [Events.enableProxSensor, States.IDLE, States.DETECTING],
@@ -50,13 +52,8 @@ class PalmReader:
         self.scannerLeds.startFlickerAnim()
 
     def on_enter_DETECTING(self):
-        self.scannerLeds.startBreathAnim()
-        def onDetect():
-            self.trigger(Events.detectHand)            
-        self.proximitySensor.startDetect(onDetect)
+        self.scannerLeds.startBreathAnim()    
+        self.proximitySensor.startDetect(self.onDetectPalm)
     
     def on_enter_SCANNING(self):
         self.scannerLeds.startScanAnim()
-
-
-palmReader = PalmReader()
