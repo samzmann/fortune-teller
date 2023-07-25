@@ -34,8 +34,8 @@ class CoinAcceptor:
             print("50 Cents")
 
         self.numImpulses = 0
-        
-        print(f"Credit: {self.totalAmount}", 1)
+
+        print(f"Credit: {self.totalAmount}")
 
         # display.lcd_clear()
         # display.lcd_display_string(f"Credit: {self.totalAmount}", 1)

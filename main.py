@@ -1,4 +1,4 @@
-from modules.coin_acceptor import CoinAcceptor
+from modules.coin_acceptor.CoinAcceptor import CoinAcceptor
 
 class FortunerTellerMachine:
     
@@ -7,4 +7,4 @@ class FortunerTellerMachine:
 
         self.coinAcceptor = CoinAcceptor()
 
-ftm = FortunerTellerMachine
+ftm = FortunerTellerMachine()
