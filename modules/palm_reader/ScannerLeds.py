@@ -36,6 +36,8 @@ class ScannerLeds:
         self.pixels.fill((60, 10,0))
         self.pixels.show()
 
+        return
+
         MIN_INTERVAL = 10
         MAX_ON_INTERVAL_MS = 1000
         MAX_OFF_INTERVAL_MS = 50
@@ -65,6 +67,8 @@ class ScannerLeds:
         self.pixels[currentPixelOnIndex] = (255,0,0)
         self.pixels.brightness = 1
         self.pixels.show()
+
+        return
 
         lastPixelChangeTimestamp = getMillis()
 
@@ -99,10 +103,12 @@ class ScannerLeds:
         MAX_BRIGHTNESS = 255
         BREATH_INCREMENT = math.floor(MAX_BRIGHTNESS / INCREMENTS_PER_PHASE)
 
-        brightness = 0
+        brightness = 0.5 # TODO: reset to 0
         self.pixels.fill((0,255, 0))
         self.pixels.brightness = gammaCorrectedValues_0_1[brightness]
         self.pixels.show()
+
+        return
 
         lastBrightnessChange = getMillis()
         isIncrementing = True
