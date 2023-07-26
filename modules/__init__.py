@@ -1,1 +1,6 @@
-all = ["coin_acceptor", "palm_reader", "lcd_display"]
+all = [
+    "bubble_motore",
+    "coin_acceptor",
+    "lcd_display",
+    "palm_reader"
+    ]
