@@ -25,12 +25,10 @@ class BubbleMotor:
         self.pi_pwm.start(0)
 
     def setOn(self):
-        print('setOn')
         GPIO.output(16, True)
         GPIO.output(22, False)
 
     def setOff(self):
-        print('setOff')
         GPIO.output(16, False)
         GPIO.output(22, False)
 
