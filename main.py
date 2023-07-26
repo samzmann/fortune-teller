@@ -1,6 +1,6 @@
 import transitions
 from enum import Enum
-from modules.bubble_motor.BubbleMotor import BubbleMotor
+# from modules.bubble_motor.BubbleMotor import BubbleMotor
 from modules.coin_acceptor.CoinAcceptor import CoinAcceptor
 from modules.lcd_display.LcdDisplay import LcdDisplay
 from modules.palm_reader.PalmReader import PalmReader
@@ -15,13 +15,13 @@ class Events(str, Enum):
     x = 'x'
     reset = 'reset'
 
-class FortunerTeller:
+class FortuneTeller:
 
     credit = 0
     
     def __init__(self) -> None:
 
-        self.bubbleMotor = BubbleMotor()
+        # self.bubbleMotor = BubbleMotor()
         self.coinAcceptor = CoinAcceptor(self.addCredit)
         self.lcdDisplay = LcdDisplay()
         self.palmReader = PalmReader(self.onDetectPalmCallback)
@@ -46,16 +46,14 @@ class FortunerTeller:
     #     self.lcdDisplay.writeLine2('-> Get Fortune')
 
     def addCredit(self, newCredit):
+        print('addCredit', newCredit)
         self.credit += newCredit
 
         self.lcdDisplay.writeLine1(f'Money$: {self.credit}')
         self.lcdDisplay.writeLine2('')
-        self.bubbleMotor.runSporadic()
     
     def on_enter_ADDING_CREDIT(self):
-        self.bubbleMotor.stopRun()
-        self.palmReader.pause()
-        self.palmReader.enableProxSensor()
+        # self.bubbleMotor.runSporadic()
         self.coinAcceptor.enable()
         self.lcdDisplay.writeLine1('Add coins to')
         self.lcdDisplay.writeLine2('start...')
@@ -74,4 +72,4 @@ class FortunerTeller:
         self.credit = 0
         self.palmReader.reset()
 
-fortunerTeller = FortunerTeller()
+fortuneTeller = FortuneTeller()

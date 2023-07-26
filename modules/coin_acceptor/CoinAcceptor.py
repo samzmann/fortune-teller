@@ -57,16 +57,17 @@ class CoinAcceptor:
         self.onAddCredit(increment)
 
     def onPulseReceived(self, pin):
+        print('onPulseReceived')
 
-        # Ignore pulses if CoinAcceptor is not enabled
-        if self.is_ENABLED() == False:
-            return
+        # # Ignore pulses if CoinAcceptor is not enabled
+        # if self.is_ENABLED() == False:
+        #     print('pulse ignore because CoinAcceptor disabled')
+        #     return
 
         if self.timerObj != None and self.timerObj.is_alive:
                 self.timerObj.cancel()
 
         self.numImpulses += 1
-        print('onPulseReceived')
         
         self.timerObj = Timer(
             self.LAST_IMPULSE_TIMEOUT,
@@ -74,3 +75,7 @@ class CoinAcceptor:
         
         self.timerObj.start()
           
+def onAddCredit(c):
+    print('onAddCredit', c)
+
+c = CoinAcceptor(onAddCredit)
