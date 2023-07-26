@@ -70,6 +70,3 @@ class BubbleMotor:
     
     def stopRun(self):
         self.isRunning = False
-
-bm = BubbleMotor()
-bm.runVerySporadic()

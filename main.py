@@ -1,5 +1,6 @@
 import transitions
 from enum import Enum
+from modules.bubble_motor.BubbleMotor import BubbleMotor
 from modules.coin_acceptor.CoinAcceptor import CoinAcceptor
 from modules.lcd_display.LcdDisplay import LcdDisplay
 from modules.palm_reader.PalmReader import PalmReader
@@ -20,9 +21,10 @@ class FortunerTeller:
     
     def __init__(self) -> None:
 
+        self.bubbleMotor = BubbleMotor()
         self.coinAcceptor = CoinAcceptor(self.addCredit)
-        self.palmReader = PalmReader(self.onDetectPalmCallback)
         self.lcdDisplay = LcdDisplay()
+        self.palmReader = PalmReader(self.onDetectPalmCallback)
 
         stateTransitions = [
             [Events.toNext, States.ADDING_CREDIT,States.WAITING_PALM],
@@ -48,8 +50,10 @@ class FortunerTeller:
 
         self.lcdDisplay.writeLine1(f'Money$: {self.credit}')
         self.lcdDisplay.writeLine2('')
+        self.bubbleMotor.runSporadic()
     
     def on_enter_ADDING_CREDIT(self):
+        self.bubbleMotor.stopRun()
         self.palmReader.pause()
         self.palmReader.enableProxSensor()
         self.coinAcceptor.enable()
