@@ -14,7 +14,7 @@ class CoinAcceptor:
 
         self.onAddCredit = onAddCredit
 
-        COIN_PIN = 21 # Physical Pin 40
+        COIN_PIN = 20 # Physical Pin 38
         
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(COIN_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
