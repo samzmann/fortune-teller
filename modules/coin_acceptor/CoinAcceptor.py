@@ -58,8 +58,3 @@ class CoinAcceptor:
             self.registerImpulses)
         
         self.timerObj.start()
-          
-def onAddCredit(c):
-    print('onAddCredit', c)
-
-c = CoinAcceptor(onAddCredit)
