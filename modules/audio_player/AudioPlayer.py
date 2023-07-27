@@ -10,6 +10,7 @@ class MyPlayer(MPyg123Player):
 
     def __init__(self, onMusicEnd = None) -> None:
          self.onMusicEnd = onMusicEnd
+         super().__init__()
 
     def on_any_stop(self):
         """Callback when the music stops for any reason"""
@@ -55,6 +56,16 @@ def play(filename):
     player = MyPlayer()
     player.play_song(filename)
 
+def pSoft():
+    player = MyPlayer()
+    player.volume(10)
+    player.play_song('tts_1690465697679.mp3')
+
+def pLoud():
+    player = MyPlayer()
+    player.volume(100)
+    player.play_song('tts_1690465697679.mp3')
+
 def removeTempFile(filename):
     os.remove(filename)
 
@@ -65,3 +76,4 @@ def playNowWithWrite(text):
         print('deleted file', filename)
     player = MyPlayer(clean)
     player.play_song(filename)
+    play.volume(50)
