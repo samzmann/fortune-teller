@@ -25,8 +25,8 @@ class MainMachine:
 
     def __init__(self) -> None:
 
-        self.bubbleMotor = BubbleMotor()
-        self.coinAcceptor = CoinAcceptor(self.addCredit)
+        # self.bubbleMotor = BubbleMotor()
+        self.coinAcceptor = CoinAcceptor(self.onAddCredit)
         self.lcdDisplay = LcdDisplay()
         self.neopixelManager = NeopixelManager()
         self.proximitySensor = ProximitySensor()
@@ -173,6 +173,7 @@ class MainMachine:
         # delete temp TTS mp3 file
         print("on_exit_READING_FORTUNE: AUDIO: delete temp TTS mp3 file")
 
+m = MainMachine()
 
 # Modules:
 # Audio

@@ -1,7 +1,7 @@
 import serial
 from enum import Enum
 
-class NeopixelCommands(Enum):
+class NeopixelCommands(int, Enum):
     SCANNER_OFF = 10
     SCANNER_FLICKER = 11
     SCANNER_BREATH_GREEN = 12

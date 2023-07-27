@@ -26,7 +26,7 @@ class ProximitySensor:
 
         CHECK_INTERVAL_SECONDS = 1
 
-        while isDetecting:
+        while self.isDetecting:
                 
             GPIO.output(PIN_TRIGGER, False)
             print("Waiting For Sensor To Settle")
@@ -51,5 +51,5 @@ class ProximitySensor:
             print("Distance: ",distance,"cm")
 
             if distance <= DISTANCE_CUTOFF_CM:
-                isDetecting = False
+                self.isDetecting = False
                 onDetect()
