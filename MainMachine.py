@@ -46,6 +46,10 @@ class MainMachine:
         # palmScanner.setState('DETECTING_PALM')
         print("onAddCredit: palmScanner.setState('DETECTING_PALM')")
 
+    def onDetectPalm(self):
+        print("onDetectPalm: transition to FETCHING_FORTUNE")
+        self.toFetchingFortune()
+
     def onReceiveGptOracleFortune(self):
         print("onReceiveGptOracleFortune: create TTS mp3 file")
         print("onReceiveGptOracleFortune: transition to READING_FORTUNE")
