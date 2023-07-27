@@ -23,7 +23,7 @@ class CoinAcceptor:
 
         self.onAddCredit = onAddCredit
 
-        COIN_PIN = 26
+        COIN_PIN = 20
         
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(COIN_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -83,3 +83,7 @@ class CoinAcceptor:
         
         self.timerObj.start()
           
+def onAddCredit(c):
+    print('onAddCredit', c)
+
+c = CoinAcceptor(onAddCredit)
