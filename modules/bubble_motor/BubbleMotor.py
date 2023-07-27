@@ -14,7 +14,7 @@ class BubbleMotor:
         GPIO.setmode(GPIO.BCM)
 
         PIN_IN_A = 16
-        PIN_IN_B = 22
+        PIN_IN_B = 20
         PIN_EN_A = 18
 
         GPIO.setup(16, GPIO.OUT)
