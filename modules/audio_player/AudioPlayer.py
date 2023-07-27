@@ -42,6 +42,12 @@ class AudioPlayer(MPyg123Player):
         """Callback when music is unmuted"""
         print("Music has been unmuted")
 
+    def playBackground(self, type):
+        file = None
+        if (type == 'elevator'):
+            file = 'audio_files/elevator_background.mp3'
+        self.play_song(file, loop=True)
+
     def saveTempMp3FileFromText(self, text):
         tts = gTTS(text, lang='en', tld='com.au')
         filename = 'tmp.mp3'
@@ -60,7 +66,7 @@ def createMp3(text):
     return filename
 
 def play(filename):
-    player = MyPlayer()
+    player = AudioPlayer()
     player.play_song(filename)
 
 def pSoft():

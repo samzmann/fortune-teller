@@ -29,6 +29,9 @@ class MainMachine:
 
     def __init__(self) -> None:
 
+        self.backgroundAudioPlayer = AudioPlayer()
+        self.backgroundAudioPlayer.volume(30)
+        self.backgroundAudioPlayer.play_song('modules/audio_player/audio_files/elevator_background.mp3', loop=True)
         self.fortuneAudioPlayer = AudioPlayer(self.onCompleteFortuneReading)
 
         # self.bubbleMotor = BubbleMotor()
@@ -96,9 +99,9 @@ class MainMachine:
     def on_enter_ADDING_CREDIT(self):
         print('')
         # AUDIO ############################
-        # play soft mystical music
-        # MAYBE: play "cat calls" (calling customers)
-        print('on_enter_ADDING_CREDIT: AUDIO: play soft mystical music')
+        # raise elevator music volume
+        print("on_enter_ADDING_CREDIT: AUDIO: raise elevator music volume")
+        self.backgroundAudioPlayer.volume(30)
 
         
         # MOTOR ############################
@@ -132,6 +135,7 @@ class MainMachine:
         # AUDIO ############################
         # play elevator music
         print("on_enter_FETCHING_FORTUNE: AUDIO: play elevator music")
+        # self.backgroundAudioPlayer.playBackground('elevator')
 
         # LCD ############################
         print(f'on_enter_FETCHING_FORTUNE: LCD: You have nice nails!')
@@ -162,6 +166,13 @@ class MainMachine:
         #   - on error -> MAYBE read some kind of backup fortune? (eg. useBackupFortune(self.credit))
         print(f"on_enter_FETCHING_FORTUNE: GPT ORACLE: gptOracle.requestFortune({self.credit})")
     
+    def on_exit_FETCHING_FORTUNE(self):
+        print('')
+        # AUDIO ############################
+        # drop elevator music volume
+        print("on_exit_FETCHING_FORTUNE: AUDIO: drop elevator music volume")
+        self.backgroundAudioPlayer.volume(15)
+
     def on_enter_READING_FORTUNE(self):
         print('')
         
