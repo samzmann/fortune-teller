@@ -3,7 +3,7 @@ import os
 from mpyg321.MPyg123Player import MPyg123Player
 import time
 
-class MyPlayer(MPyg123Player):
+class AudioPlayer(MPyg123Player):
     """We create a class extending the basic player to implement callbacks"""
 
     onMusicEnd = None
@@ -41,6 +41,13 @@ class MyPlayer(MPyg123Player):
     def on_user_unmute(self):
         """Callback when music is unmuted"""
         print("Music has been unmuted")
+
+    def saveTempMp3FileFromText(self, text):
+        tts = gTTS(text, lang='en', tld='com.au')
+        filename = 'tmp.mp3'
+        tts.save(filename)
+        print(f'Saved {filename}')
+        return filename
 
 def getMillis():
     return time.time_ns() // 1_000_000

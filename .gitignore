@@ -1,5 +1,9 @@
 .DS_Store
 
+# Where I store the ChatGPT API Key
+*apiKey.py
+*tmp.mp3
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

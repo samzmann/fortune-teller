@@ -3,8 +3,10 @@ from enum import Enum
 
 import time
 
+from modules.audio_player.AudioPlayer import AudioPlayer
 from modules.bubble_motor.BubbleMotor import BubbleMotor
 from modules.coin_acceptor.CoinAcceptor import CoinAcceptor
+from modules.gpt_oracle.GptOracle import GptOracle
 from modules.lcd_display.LcdDisplay import LcdDisplay
 from modules.neopixel_manager.NeopixelManager import NeopixelManager, NeopixelCommands
 from modules.palm_reader.ProximitySensor import ProximitySensor
@@ -27,8 +29,11 @@ class MainMachine:
 
     def __init__(self) -> None:
 
+        self.fortuneAudioPlayer = AudioPlayer(self.onCompleteFortuneReading)
+
         # self.bubbleMotor = BubbleMotor()
         self.coinAcceptor = CoinAcceptor(self.onAddCredit)
+        self.gptOracle = GptOracle()
         self.lcdDisplay = LcdDisplay()
         self.neopixelManager = NeopixelManager()
         self.proximitySensor = ProximitySensor(self.onDetectPalm)
@@ -67,9 +72,10 @@ class MainMachine:
             self.lcdDisplay.writeLine2(f'reading: {self.credit}')
 
         # PALM SCANNER ############################
-        print("onAddCredit: PALM SCANNER: proximitySensor.startDetect()")
-        self.proximitySensor.startDetect()
-        self.neopixelManager.send(NeopixelCommands.SCANNER_BREATH_GREEN)
+        if self.is_ADDING_CREDIT():
+            print("onAddCredit: PALM SCANNER: proximitySensor.startDetect()")
+            self.proximitySensor.startDetect()
+            self.neopixelManager.send(NeopixelCommands.SCANNER_BREATH_GREEN)
 
     def onDetectPalm(self):
         if self.credit == 0:
@@ -127,14 +133,6 @@ class MainMachine:
         # play elevator music
         print("on_enter_FETCHING_FORTUNE: AUDIO: play elevator music")
 
-        # GPT ORACLE ############################
-        # self.gptOracle.requestFortune(self.credit) AND then reset self.credit
-        #   - on success
-        #       -> self.setFortuneText()
-        #       -> self.toReadingFortune()
-        #   - on error -> MAYBE read some kind of backup fortune? (eg. useBackupFortune(self.credit))
-        print(f"on_enter_FETCHING_FORTUNE: GPT ORACLE: gptOracle.requestFortune({self.credit})")
-
         # LCD ############################
         print(f'on_enter_FETCHING_FORTUNE: LCD: You have nice nails!')
         self.lcdDisplay.writeLine1('You have nice')
@@ -144,19 +142,28 @@ class MainMachine:
         # self.bubbleMotor.runSporadic()
         print('on_enter_FETCHING_FORTUNE: MOTOR: blow bubbles sporadicly')
 
-
         # PALM SCANNER ############################
         print("on_enter_FETCHING_FORTUNE: PALM SCANNER SCANNER_SCAN")
         self.neopixelManager.send(NeopixelCommands.SCANNER_SCAN)
+
+        # GPT ORACLE ############################
+        creditBeforeReset = self.credit
+        self.credit = 0
+        fortuneText = self.gptOracle.requestFortune(creditBeforeReset)
+        print('fortune text', fortuneText)
+        self.fortuneAudioPlayer.saveTempMp3FileFromText(fortuneText)
+        self.toReadingFortune()
+
+        # AND then reset self.credit
+
+        #   - on success
+        #       -> self.setFortuneText()
+        #       -> self.toReadingFortune()
+        #   - on error -> MAYBE read some kind of backup fortune? (eg. useBackupFortune(self.credit))
+        print(f"on_enter_FETCHING_FORTUNE: GPT ORACLE: gptOracle.requestFortune({self.credit})")
     
     def on_enter_READING_FORTUNE(self):
         print('')
-
-        # AUDIO ############################
-        # play intense mystical music
-        print("on_enter_READING_FORTUNE: AUDIO: play intense mystical music")
-        # play TTS mp3 file
-        print("on_enter_READING_FORTUNE: AUDIO: play TTS mp3 file")
         
         # Text To Speech, then:
         # play fortune reading mp3:
@@ -170,6 +177,13 @@ class MainMachine:
         # PALM SCANNER ############################
         # Nothing! (Still in 'SCANNING' state)
 
+        # AUDIO ############################
+        # play intense mystical music
+        print("on_enter_READING_FORTUNE: AUDIO: play intense mystical music")
+        # play TTS mp3 file
+        print("on_enter_READING_FORTUNE: AUDIO: play TTS mp3 file")
+        self.fortuneAudioPlayer.play_song('tmp.mp3')
+
     def on_exit_READING_FORTUNE(self):
         # AUDIO ############################
         # delete temp TTS mp3 file
@@ -179,13 +193,13 @@ class MainMachine:
         self.proximitySensor.detect()
 
 m = MainMachine()
-m.onAddCredit(1)
-time.sleep(1)
-m.onDetectPalm()
-time.sleep(1)
-m.onReceiveGptOracleFortune()
-time.sleep(1)
-m.onCompleteFortuneReading()
+# m.onAddCredit(1)
+# time.sleep(1)
+# m.onDetectPalm()
+# time.sleep(1)
+# m.onReceiveGptOracleFortune()
+# time.sleep(1)
+# m.onCompleteFortuneReading()
 
 # Modules:
 # Audio
@@ -197,6 +211,5 @@ m.onCompleteFortuneReading()
 # Gpt Oracle (ChatGPT Client)
 
 
-
-# while True:
-#     m.updateLoop()
+while True:
+    m.updateLoop()
