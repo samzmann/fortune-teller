@@ -5,7 +5,7 @@ from modules.bubble_motor.BubbleMotor import BubbleMotor
 from modules.coin_acceptor.CoinAcceptor import CoinAcceptor
 from modules.lcd_display.LcdDisplay import LcdDisplay
 from modules.neopixel_manager.NeopixelManager import NeopixelManager, NeopixelCommands
-from modules.palm_reader.PalmReader import PalmReader
+from modules.palm_reader.ProximitySensor import ProximitySensor
 
 
 class States(str, Enum):
@@ -29,7 +29,7 @@ class MainMachine:
         self.coinAcceptor = CoinAcceptor(self.addCredit)
         self.lcdDisplay = LcdDisplay()
         self.neopixelManager = NeopixelManager()
-        # self.palmReader = PalmReader(self.onDetectPalmCallback)
+        self.proximitySensor = ProximitySensor()
 
         stateTransitions = [
             [Events.toFetchingFortune, States.ADDING_CREDIT, States.FETCHING_FORTUNE],
@@ -65,8 +65,9 @@ class MainMachine:
             self.lcdDisplay.writeLine2(f'reading: {self.credit}')
 
         # PALM SCANNER ############################
-        # palmScanner.setState('DETECTING_PALM')
-        print("onAddCredit: palmScanner.setState('DETECTING_PALM')")
+        print("onAddCredit: PALM SCANNER: proximitySensor.startDetect()")
+        self.proximitySensor.startDetect(self.onDetectPalm)
+        self.neopixelManager.send(NeopixelCommands.SCANNER_BREATH_GREEN)
 
     def onDetectPalm(self):
         if self.credit == 0:
@@ -110,11 +111,13 @@ class MainMachine:
 
 
         # PALM SCANNER ############################
-        # if has credit:
-        #   palmScanner.setState('DETECTING_PALM')
-        # else:
-        #   palmScanner.setState('FLICKERING')
-        print("on_enter_ADDING_CREDIT: PALM SCANNER: palmScanner.setState('DETECTING_PALM') or palmScanner.setState('FLICKERING')")
+        if self.credit > 0:
+            print("on_enter_ADDING_CREDIT: PALM SCANNER: proximitySensor.startDetect()")
+            self.proximitySensor.startDetect(self.onDetectPalm)
+            self.neopixelManager.send(NeopixelCommands.SCANNER_BREATH_GREEN)
+        else:
+            print("on_enter_ADDING_CREDIT: PALM SCANNER flicker")
+            self.neopixelManager.send(NeopixelCommands.SCANNER_FLICKER)
 
     def on_enter_FETCHING_FORTUNE(self):
         print('')
@@ -141,8 +144,8 @@ class MainMachine:
 
 
         # PALM SCANNER ############################
-        # palmScanner.setState('SCANNING')
-        print("on_enter_ADDING_CREDIT: PALM SCANNER: palmScanner.setState('SCANNING')")
+        print("on_enter_ADDING_CREDIT: PALM SCANNER SCANNER_SCAN")
+        self.neopixelManager.send(NeopixelCommands.SCANNER_SCAN)
     
     def on_enter_READING_FORTUNE(self):
         print('')

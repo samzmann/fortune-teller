@@ -7,6 +7,7 @@ PIN_ECHO = 17
 DISTANCE_CUTOFF_CM = 10 # 10 centimeters
 
 class ProximitySensor:
+    isDetecting = False
 
     def __init__(self) -> None:
 
@@ -15,8 +16,11 @@ class ProximitySensor:
         GPIO.setup(PIN_ECHO, GPIO.IN)
     
     def startDetect(self, onDetect):
+
+        if self.isDetecting:
+            return
         
-        isDetecting = True
+        self.isDetecting = True
 
         print("Distance Measurement In Progress")
 
