@@ -47,11 +47,20 @@ class CoinAcceptor:
 
         increment = 0
         if (self.numImpulses == 1):
+            increment = 2 # 2 Euro coin
+            print("2 Euros")
+        elif (self.numImpulses == 2):
             increment = 1 # 1 Euro coin
             print("1 Euro")
-        elif (self.numImpulses == 2):
+        elif (self.numImpulses == 3):
             increment = 0.5 # 50 Cents coin
             print("50 Cents")
+        elif (self.numImpulses == 4):
+            increment = 0.2 # 20 Cents coin
+            print("20 Cents")
+        elif (self.numImpulses == 5):
+            increment = 0.1 # 10 Cents coin
+            print("20 Cents")
 
         self.numImpulses = 0
         self.onAddCredit(increment)
