@@ -57,8 +57,12 @@ class MainMachine:
         # LCD ############################
         if self.is_ADDING_CREDIT():
             print(f'onAddCredit: LCD: show credit {self.credit}')
+            self.lcdDisplay.writeLine1(f'Credit: {self.credit}')
+            self.lcdDisplay.writeLine2('')
         else:
-            print(f'onAddCredit: LCD: Credit for next reading {self.credit}')
+            print(f'onAddCredit: LCD: Credit for next reading: {self.credit}')
+            self.lcdDisplay.writeLine1('Credit for next')
+            self.lcdDisplay.writeLine2(f'reading: {self.credit}')
 
         # PALM SCANNER ############################
         # palmScanner.setState('DETECTING_PALM')
@@ -90,14 +94,19 @@ class MainMachine:
         
         # MOTOR ############################
         # blow bubbles very sporadicly
-        self.bubbleMotor.runVerySporadic()
         print('on_enter_ADDING_CREDIT: MOTOR: blow bubbles very sporadicly')
+        # self.bubbleMotor.runVerySporadic()
+        self.neopixelManager.send(NeopixelCommands.MOTOR_RAINBOW)
 
         # LCD ############################
         if self.credit > 0:
             print(f'on_enter_ADDING_CREDIT: LCD: show credit {self.credit}')
+            self.lcdDisplay.writeLine1(f'Credit: {self.credit}')
+            self.lcdDisplay.writeLine2('')
         else:
             print('on_enter_ADDING_CREDIT: LCD: Add coins to start...')
+            self.lcdDisplay.writeLine1('Add coins to')
+            self.lcdDisplay.writeLine2('start...')
 
 
         # PALM SCANNER ############################
@@ -121,11 +130,13 @@ class MainMachine:
         #   - on error -> MAYBE read some kind of backup fortune? (eg. useBackupFortune(self.credit))
         print(f"on_enter_ADDING_CREDIT: GPT ORACLE: gptOracle.requestFortune({self.credit})")
 
-         # LCD ############################
-        print(f'on_enter_FETCHING_FORTUNE: LCD: figuring out your fortune')
+        # LCD ############################
+        print(f'on_enter_FETCHING_FORTUNE: LCD: You have nice nails!')
+        self.lcdDisplay.writeLine1('You have nice')
+        self.lcdDisplay.writeLine2('hands :/')
 
         # MOTOR ############################
-        # blow bubbles sporadicly
+        # self.bubbleMotor.runSporadic()
         print('on_enter_ADDING_CREDIT: MOTOR: blow bubbles sporadicly')
 
 
@@ -148,6 +159,8 @@ class MainMachine:
 
         # LCD ############################
         print(f'on_enter_READING_FORTUNE: LCD: Your destiny...')
+        self.lcdDisplay.writeLine1('Your destiny')
+        self.lcdDisplay.writeLine2('is here!')
 
         # PALM SCANNER ############################
         # Nothing! (Still in 'SCANNING' state)
