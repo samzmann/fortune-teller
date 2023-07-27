@@ -3,14 +3,6 @@ from enum import Enum
 import RPi.GPIO as GPIO
 from threading import Timer
 
-class States(str, Enum):
-    DISABLED = 'DISABLED'
-    ENABLED = 'ENABLED'
-
-class Events(str, Enum):
-    enable = 'enable'
-    disable = 'disable'
-
 class CoinAcceptor:
     
     LAST_IMPULSE_TIMEOUT = 0.150 # 150 ms
@@ -23,25 +15,13 @@ class CoinAcceptor:
 
         self.onAddCredit = onAddCredit
 
-        COIN_PIN = 20
+        COIN_PIN = 26
         
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(COIN_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
         GPIO.add_event_detect(COIN_PIN, GPIO.FALLING)
         GPIO.add_event_callback(COIN_PIN, self.onPulseReceived)
-
-        stateTransitions = [
-            [Events.enable, States.DISABLED, States.ENABLED],
-            [Events.disable, States.ENABLED, States.DISABLED]
-            ]
-
-        self.machine = transitions.Machine(
-            model=self,
-            states=States,
-            transitions=stateTransitions,
-            initial=States.DISABLED
-            )
 
     def registerImpulses(self):
 
@@ -66,10 +46,6 @@ class CoinAcceptor:
         self.onAddCredit(increment)
 
     def onPulseReceived(self, pin):
-
-        # Ignore pulses if CoinAcceptor is not enabled
-        if self.is_ENABLED() == False:
-            return
 
         if self.timerObj != None and self.timerObj.is_alive:
                 self.timerObj.cancel()
