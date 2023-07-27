@@ -86,12 +86,12 @@ class MainMachine:
         print("on_enter_ADDING_CREDIT: AUDIO: play elevator music")
 
         # GPT ORACLE ############################
-        # self.gptOracle.requestFortune()
+        # self.gptOracle.requestFortune(self.credit) AND then reset self.credit
         #   - on success
         #       -> self.setFortuneText()
         #       -> self.toReadingFortune()
-        #   - on error -> MAYBE read some kind of backup fortune?
-        print("on_enter_ADDING_CREDIT: GPT ORACLE: gptOracle.requestFortune()")
+        #   - on error -> MAYBE read some kind of backup fortune? (eg. useBackupFortune(self.credit))
+        print(f"on_enter_ADDING_CREDIT: GPT ORACLE: gptOracle.requestFortune({self.credit})")
 
         # MOTOR ############################
         # blow bubbles sporadicly
@@ -108,6 +108,8 @@ class MainMachine:
         # AUDIO ############################
         # play intense mystical music
         print("on_enter_READING_FORTUNE: AUDIO: play intense mystical music")
+        # play TTS mp3 file
+        print("on_enter_READING_FORTUNE: AUDIO: play TTS mp3 file")
         
         # Text To Speech, then:
         # play fortune reading mp3:
@@ -115,6 +117,11 @@ class MainMachine:
 
         # PALM SCANNER ############################
         # Nothing! (Still in 'SCANNING' state)
+
+    def on_exit_READING_FORTUNE(self):
+        # AUDIO ############################
+        # delete temp TTS mp3 file
+        print("on_exit_READING_FORTUNE: AUDIO: delete temp TTS mp3 file")
 
 
 # Modules:
