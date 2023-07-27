@@ -39,6 +39,14 @@ def runC():
     turnOnHalfSec()
 
 class Strip:
+
+    # 0: off
+    # 1: flicker
+    # 2: breath green
+    # 3: scan
+    # 4: rainbow
+    animation = 0
+
     hue = 0
     sat = 255
     val = 255
@@ -54,14 +62,39 @@ class Strip:
             "GRB"
         )
 
-    def hsv(self, h, s, v):
-        self.pixels.fill(self.pixels.colorHSV(h, s, v))
-        self.pixels.show()
-        
-    def animRainbow(self):
-        self.hue += 3
-        self.hsv(self.hue, self.sat, self.val)
+    def resetLeds(self):
+        self.pixels.fill((0,0,0))
+        self.pixels.brightness(255)
+        self.lastBlinkChange = utime.ticks_ms()
+        self.hue = 0
+
+    def setAnimation(self, value):
+        self.animation = value
+        self.resetLeds()
+
+    def runAnimation(self):
+        if self.animation == 0:
+            # print('off')
+            self.animOff()
+        elif self.animation == 1:
+            # print('animFlicker')
+            self.animFlicker()
+        elif self.animation == 2:
+            print('animBreathGreen')
+            # self.animBreathGreen()
+        elif self.animation == 3:
+            print('animScan')
+            # self.animScan()
+        elif self.animation == 4:
+            # print('animRainbow')
+            self.animRainbow()
     
+    # Off: animation type 0
+    def animOff(self):
+        self.pixels.fill((0,0,0))
+        self.pixels.show()
+    
+    # Flicker: animation type 1
     def animFlicker(self):
 
         self.pixels.fill((60, 10,0))
@@ -84,14 +117,44 @@ class Strip:
 
             self.pixels.show()
 
+    # Rainbow: animation type 4
+    def animRainbow(self):
+        self.hue += 3
+        self.pixels.fill(self.pixels.colorHSV(self.hue, self.sat, self.val))
+        self.pixels.show()
 
-strip = Strip(10, 0, 15)
+scannerStrip = Strip(10, 0, 15)
+bubbleStrip = Strip(10, 1, 14)
 
 def onReceiveUartCommand(command):
     print('onReceiveUartCommand', command)
 
+    # Command list:
+    # 10: Scanner off
+    # 11: Scanner flicker
+    # 12: Scanner Breath green
+    # 13: Scanner scan
+
+    # 20: Bubble off
+    # 24: Bubble rainbow
+
+    if command == 10:
+        scannerStrip.setAnimation(0)
+    elif command == 11:
+        scannerStrip.setAnimation(1)
+    if command == 12:
+        scannerStrip.setAnimation(2)
+    elif command == 13:
+        scannerStrip.setAnimation(3)
+
+    elif command == 20:
+        bubbleStrip.setAnimation(0)
+    elif command == 24:
+        bubbleStrip.setAnimation(4)
+
 while True:
     listenUart(onReceiveUartCommand)
-    strip.animFlicker()
+    scannerStrip.runAnimation()
+    bubbleStrip.runAnimation()
 
 
