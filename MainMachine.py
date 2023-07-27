@@ -1,6 +1,13 @@
 import transitions
 from enum import Enum
 
+from modules.bubble_motor.BubbleMotor import BubbleMotor
+from modules.coin_acceptor.CoinAcceptor import CoinAcceptor
+from modules.lcd_display.LcdDisplay import LcdDisplay
+from modules.neopixel_manager.NeopixelManager import NeopixelManager, NeopixelCommands
+from modules.palm_reader.PalmReader import PalmReader
+
+
 class States(str, Enum):
     ADDING_CREDIT = 'ADDING_CREDIT'
     FETCHING_FORTUNE = 'FETCHING_FORTUNE'
@@ -17,6 +24,12 @@ class MainMachine:
     credit = 0
 
     def __init__(self) -> None:
+
+        self.bubbleMotor = BubbleMotor()
+        self.coinAcceptor = CoinAcceptor(self.addCredit)
+        self.lcdDisplay = LcdDisplay()
+        self.neopixelManager = NeopixelManager()
+        # self.palmReader = PalmReader(self.onDetectPalmCallback)
 
         stateTransitions = [
             [Events.toFetchingFortune, States.ADDING_CREDIT, States.FETCHING_FORTUNE],
@@ -77,6 +90,7 @@ class MainMachine:
         
         # MOTOR ############################
         # blow bubbles very sporadicly
+        self.bubbleMotor.runVerySporadic()
         print('on_enter_ADDING_CREDIT: MOTOR: blow bubbles very sporadicly')
 
         # LCD ############################

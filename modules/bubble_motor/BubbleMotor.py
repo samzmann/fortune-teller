@@ -7,30 +7,30 @@ def getMillis():
     ms = time.time_ns() // 1_000_000
     return ms
 
+PIN_IN_A = 16
+PIN_IN_B = 20
+PIN_EN_A = 18
+
 class BubbleMotor:
     isRunning = False
 
     def __init__(self) -> None:
         GPIO.setmode(GPIO.BCM)
 
-        PIN_IN_A = 16
-        PIN_IN_B = 20
-        PIN_EN_A = 18
-
-        GPIO.setup(16, GPIO.OUT)
-        GPIO.setup(22, GPIO.OUT)
+        GPIO.setup(PIN_IN_A, GPIO.OUT)
+        GPIO.setup(PIN_IN_B, GPIO.OUT)
         GPIO.setup(PIN_EN_A, GPIO.OUT)
 
         self.pi_pwm = GPIO.PWM(PIN_EN_A,1500)
         self.pi_pwm.start(0)
 
     def setOn(self):
-        GPIO.output(16, True)
-        GPIO.output(22, False)
+        GPIO.output(PIN_IN_A, True)
+        GPIO.output(PIN_IN_B, False)
 
     def setOff(self):
-        GPIO.output(16, False)
-        GPIO.output(22, False)
+        GPIO.output(PIN_IN_A, False)
+        GPIO.output(PIN_IN_B, False)
 
     def runWithIntervals(self, maxOnMs, maxOffMs, minIntervalMs):
         self.isRunning = True
