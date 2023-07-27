@@ -41,17 +41,25 @@ class MainMachine:
         # MAYBE: comment on added coin ("2 euros, wow", "10 cents, you cheap")
         print('onAddCredit: AUDIO: sound Ka$hinggg')
 
+        # LCD ############################
+        if self.is_ADDING_CREDIT():
+            print(f'onAddCredit: LCD: show credit {self.credit}')
+        else:
+            print(f'onAddCredit: LCD: Credit for next reading {self.credit}')
 
         # PALM SCANNER ############################
         # palmScanner.setState('DETECTING_PALM')
         print("onAddCredit: palmScanner.setState('DETECTING_PALM')")
 
     def onDetectPalm(self):
+        if self.credit == 0:
+            print("onDetectPalm: No credit. Ignoring")
+            return
         print("onDetectPalm: transition to FETCHING_FORTUNE")
         self.toFetchingFortune()
 
     def onReceiveGptOracleFortune(self):
-        print("onReceiveGptOracleFortune: create TTS mp3 file")
+        print("onReceiveGptOracleFortune: create temp TTS mp3 file")
         print("onReceiveGptOracleFortune: transition to READING_FORTUNE")
         self.toReadingFortune()
 
@@ -70,6 +78,12 @@ class MainMachine:
         # MOTOR ############################
         # blow bubbles very sporadicly
         print('on_enter_ADDING_CREDIT: MOTOR: blow bubbles very sporadicly')
+
+        # LCD ############################
+        if self.credit > 0:
+            print(f'on_enter_ADDING_CREDIT: LCD: show credit {self.credit}')
+        else:
+            print('on_enter_ADDING_CREDIT: LCD: Add coins to start...')
 
 
         # PALM SCANNER ############################
@@ -93,6 +107,9 @@ class MainMachine:
         #   - on error -> MAYBE read some kind of backup fortune? (eg. useBackupFortune(self.credit))
         print(f"on_enter_ADDING_CREDIT: GPT ORACLE: gptOracle.requestFortune({self.credit})")
 
+         # LCD ############################
+        print(f'on_enter_FETCHING_FORTUNE: LCD: figuring out your fortune')
+
         # MOTOR ############################
         # blow bubbles sporadicly
         print('on_enter_ADDING_CREDIT: MOTOR: blow bubbles sporadicly')
@@ -114,6 +131,9 @@ class MainMachine:
         # Text To Speech, then:
         # play fortune reading mp3:
         #   - on complete -> self.reset()
+
+        # LCD ############################
+        print(f'on_enter_READING_FORTUNE: LCD: Your destiny...')
 
         # PALM SCANNER ############################
         # Nothing! (Still in 'SCANNING' state)
