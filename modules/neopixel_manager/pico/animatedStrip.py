@@ -134,7 +134,6 @@ class AnimatedStrip:
                     self.breathBrightness = MIN_BRIGHTNESS
                     self.isBreathIncrementing = True
 
-            print('self.breathBrightness', self.breathBrightness, ' | ', gammaCorrectSingleValue(self.breathBrightness))
             self.pixels.brightness(gammaCorrectSingleValue(self.breathBrightness))
             self.pixels.show()
 

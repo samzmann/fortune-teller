@@ -29,7 +29,7 @@ class MainMachine:
         self.coinAcceptor = CoinAcceptor(self.onAddCredit)
         self.lcdDisplay = LcdDisplay()
         self.neopixelManager = NeopixelManager()
-        self.proximitySensor = ProximitySensor()
+        self.proximitySensor = ProximitySensor(self.onDetectPalm)
 
         stateTransitions = [
             [Events.toFetchingFortune, States.ADDING_CREDIT, States.FETCHING_FORTUNE],
@@ -66,7 +66,7 @@ class MainMachine:
 
         # PALM SCANNER ############################
         print("onAddCredit: PALM SCANNER: proximitySensor.startDetect()")
-        self.proximitySensor.startDetect(self.onDetectPalm)
+        self.proximitySensor.startDetect()
         self.neopixelManager.send(NeopixelCommands.SCANNER_BREATH_GREEN)
 
     def onDetectPalm(self):
@@ -113,7 +113,7 @@ class MainMachine:
         # PALM SCANNER ############################
         if self.credit > 0:
             print("on_enter_ADDING_CREDIT: PALM SCANNER: proximitySensor.startDetect()")
-            self.proximitySensor.startDetect(self.onDetectPalm)
+            self.proximitySensor.startDetect()
             self.neopixelManager.send(NeopixelCommands.SCANNER_BREATH_GREEN)
         else:
             print("on_enter_ADDING_CREDIT: PALM SCANNER flicker")
@@ -173,6 +173,9 @@ class MainMachine:
         # delete temp TTS mp3 file
         print("on_exit_READING_FORTUNE: AUDIO: delete temp TTS mp3 file")
 
+    def updateLoop(self):
+        self.proximitySensor.detect()
+
 m = MainMachine()
 
 # Modules:
@@ -183,3 +186,6 @@ m = MainMachine()
 # Palm Scanner
 # NeoPixel Manager (Motor + Scanner leds)
 # Gpt Oracle (ChatGPT Client)
+
+while True:
+    m.updateLoop()
