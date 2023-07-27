@@ -1,6 +1,8 @@
 import transitions
 from enum import Enum
 
+import time
+
 from modules.bubble_motor.BubbleMotor import BubbleMotor
 from modules.coin_acceptor.CoinAcceptor import CoinAcceptor
 from modules.lcd_display.LcdDisplay import LcdDisplay
@@ -123,7 +125,7 @@ class MainMachine:
         print('')
         # AUDIO ############################
         # play elevator music
-        print("on_enter_ADDING_CREDIT: AUDIO: play elevator music")
+        print("on_enter_FETCHING_FORTUNE: AUDIO: play elevator music")
 
         # GPT ORACLE ############################
         # self.gptOracle.requestFortune(self.credit) AND then reset self.credit
@@ -131,7 +133,7 @@ class MainMachine:
         #       -> self.setFortuneText()
         #       -> self.toReadingFortune()
         #   - on error -> MAYBE read some kind of backup fortune? (eg. useBackupFortune(self.credit))
-        print(f"on_enter_ADDING_CREDIT: GPT ORACLE: gptOracle.requestFortune({self.credit})")
+        print(f"on_enter_FETCHING_FORTUNE: GPT ORACLE: gptOracle.requestFortune({self.credit})")
 
         # LCD ############################
         print(f'on_enter_FETCHING_FORTUNE: LCD: You have nice nails!')
@@ -140,11 +142,11 @@ class MainMachine:
 
         # MOTOR ############################
         # self.bubbleMotor.runSporadic()
-        print('on_enter_ADDING_CREDIT: MOTOR: blow bubbles sporadicly')
+        print('on_enter_FETCHING_FORTUNE: MOTOR: blow bubbles sporadicly')
 
 
         # PALM SCANNER ############################
-        print("on_enter_ADDING_CREDIT: PALM SCANNER SCANNER_SCAN")
+        print("on_enter_FETCHING_FORTUNE: PALM SCANNER SCANNER_SCAN")
         self.neopixelManager.send(NeopixelCommands.SCANNER_SCAN)
     
     def on_enter_READING_FORTUNE(self):
@@ -177,6 +179,13 @@ class MainMachine:
         self.proximitySensor.detect()
 
 m = MainMachine()
+m.onAddCredit(1)
+time.sleep(1)
+m.onDetectPalm()
+time.sleep(1)
+m.onReceiveGptOracleFortune()
+time.sleep(1)
+m.onCompleteFortuneReading()
 
 # Modules:
 # Audio
@@ -187,5 +196,7 @@ m = MainMachine()
 # NeoPixel Manager (Motor + Scanner leds)
 # Gpt Oracle (ChatGPT Client)
 
-while True:
-    m.updateLoop()
+
+
+# while True:
+#     m.updateLoop()
