@@ -34,7 +34,7 @@ class MainMachine:
         self.backgroundAudioPlayer.play_song('modules/audio_player/audio_files/elevator_background.mp3', loop=True)
         self.fortuneAudioPlayer = AudioPlayer(self.onCompleteFortuneReading)
 
-        # self.bubbleMotor = BubbleMotor()
+        self.bubbleMotor = BubbleMotor()
         self.coinAcceptor = CoinAcceptor(self.onAddCredit)
         self.gptOracle = GptOracle()
         self.lcdDisplay = LcdDisplay()
@@ -107,7 +107,7 @@ class MainMachine:
         # MOTOR ############################
         # blow bubbles very sporadicly
         print('on_enter_ADDING_CREDIT: MOTOR: blow bubbles very sporadicly')
-        # self.bubbleMotor.runVerySporadic()
+        self.bubbleMotor.runVerySporadic()
         self.neopixelManager.send(NeopixelCommands.MOTOR_RAINBOW)
 
         # LCD ############################
@@ -143,7 +143,7 @@ class MainMachine:
         self.lcdDisplay.writeLine2('hands :/')
 
         # MOTOR ############################
-        # self.bubbleMotor.runSporadic()
+        self.bubbleMotor.runSporadic()
         print('on_enter_FETCHING_FORTUNE: MOTOR: blow bubbles sporadicly')
 
         # PALM SCANNER ############################
@@ -202,6 +202,7 @@ class MainMachine:
 
     def updateLoop(self):
         self.proximitySensor.detect()
+        self.bubbleMotor.run()
 
 m = MainMachine()
 # m.onAddCredit(1)

@@ -13,6 +13,12 @@ PIN_EN_A = 18
 
 class BubbleMotor:
     isRunning = False
+    isOn = False
+    nextChange = 0
+
+    MAX_ON_MS = 2000
+    MAX_OFF_MS = 2000
+    MIN_INTERVAL_MS = 250
 
     def __init__(self) -> None:
         GPIO.setmode(GPIO.BCM)
@@ -32,39 +38,42 @@ class BubbleMotor:
         GPIO.output(PIN_IN_A, False)
         GPIO.output(PIN_IN_B, False)
 
-    def runWithIntervals(self, maxOnMs, maxOffMs, minIntervalMs):
+    def runWithIntervals(self):
+
+        if self.isRunning == False:
+            return
+
+        now = getMillis()
+
+        if now > self.nextChange:
+            if self.isOn:
+                self.isOn = False
+                self.nextChange = now + random.randint(self.MIN_INTERVAL_MS, self.MAX_OFF_MS)
+                self.setOff()
+            else:
+                self.isOn = True
+                self.nextChange = now + random.randint(self.MIN_INTERVAL_MS, self.MAX_ON_MS)
+                self.setOn()
+
+    def runSporadic(self):
+        self.MAX_ON_MS = 2000
+        self.MAX_OFF_MS = 2000
+        self.MIN_INTERVAL_MS = 250
+
+        self.isRunning = True
+        self.pi_pwm.ChangeDutyCycle(40)
+        self.setOn()
+
+    def runVerySporadic(self):
+        self.MAX_ON_MS = 2000
+        self.MAX_OFF_MS = 5000
+        self.MIN_INTERVAL_MS = 250
+        
         self.isRunning = True
         self.pi_pwm.ChangeDutyCycle(30)
 
-        isOn = False
-        nextChange = getMillis()
-
-        while self.isRunning:
-            now = getMillis()
-
-
-            if now > nextChange:
-                if isOn:
-                    isOn = False
-                    nextChange = now + random.randint(minIntervalMs, maxOffMs)
-                    self.setOff()
-                else:
-                    isOn = True
-                    nextChange = now + random.randint(minIntervalMs, maxOnMs)
-                    self.setOn()
-
-    def runSporadic(self):
-        MAX_ON_MS = 2000
-        MAX_OFF_MS = 2000
-        MIN_INTERVAL_MS = 250
-        self.runWithIntervals(MAX_ON_MS, MAX_OFF_MS, MIN_INTERVAL_MS)
-
-
-    def runVerySporadic(self):
-        MAX_ON_MS = 1000
-        MAX_OFF_MS = 10000
-        MIN_INTERVAL_MS = 250
-        self.runWithIntervals(MAX_ON_MS, MAX_OFF_MS, MIN_INTERVAL_MS)
+    def run(self):
+        self.runWithIntervals()
     
     def stopRun(self):
         self.isRunning = False
