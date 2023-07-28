@@ -25,10 +25,12 @@ class BubbleMotor:
 
         GPIO.setup(PIN_IN_A, GPIO.OUT)
         GPIO.setup(PIN_IN_B, GPIO.OUT)
+        
         GPIO.setup(PIN_EN_A, GPIO.OUT)
+        GPIO.output(PIN_EN_A, True)
 
-        self.pi_pwm = GPIO.PWM(PIN_EN_A,1500)
-        self.pi_pwm.start(0)
+        # self.pi_pwm = GPIO.PWM(PIN_EN_A,1500)
+        # self.pi_pwm.start(0)
 
     def setOn(self):
         GPIO.output(PIN_IN_A, True)
@@ -61,7 +63,7 @@ class BubbleMotor:
         self.MIN_INTERVAL_MS = 500
 
         self.isRunning = True
-        self.pi_pwm.ChangeDutyCycle(90)
+        # self.pi_pwm.ChangeDutyCycle(90)
         self.setOn()
 
     def runVerySporadic(self):
@@ -70,7 +72,7 @@ class BubbleMotor:
         self.MIN_INTERVAL_MS = 500
         
         self.isRunning = True
-        self.pi_pwm.ChangeDutyCycle(70)
+        # self.pi_pwm.ChangeDutyCycle(70)
 
     def run(self):
         self.runWithIntervals()

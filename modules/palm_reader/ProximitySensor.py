@@ -11,7 +11,7 @@ PIN_ECHO = 17
 CHECK_INTERVAL_SECONDS = 1
 CHECK_INTERVAL_MS = 1000
 
-DISTANCE_CUTOFF_CM = 10 # 10 centimeters
+DISTANCE_CUTOFF_CM = 12 # 10 centimeters
 
 class ProximitySensor:
     isDetecting = False

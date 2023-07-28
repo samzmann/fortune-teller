@@ -30,7 +30,7 @@ class AudioPlayer(MPyg123Player):
 
     def on_music_end(self):
         """Callback when music ends"""
-        print("The music has ended")
+        # print("The music has ended")
         if self.onMusicEnd != None:
             self.onMusicEnd()
 
