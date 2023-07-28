@@ -79,6 +79,7 @@ class MainMachine:
             print("onAddCredit: PALM SCANNER: proximitySensor.startDetect()")
             self.proximitySensor.startDetect()
             self.neopixelManager.send(NeopixelCommands.SCANNER_BREATH_GREEN)
+            self.neopixelManager.send(NeopixelCommands.MOTOR_OFF)
 
     def onDetectPalm(self):
         if self.credit == 0:
@@ -126,6 +127,7 @@ class MainMachine:
             print("on_enter_ADDING_CREDIT: PALM SCANNER: proximitySensor.startDetect()")
             self.proximitySensor.startDetect()
             self.neopixelManager.send(NeopixelCommands.SCANNER_BREATH_GREEN)
+            self.neopixelManager.send(NeopixelCommands.MOTOR_OFF)
         else:
             print("on_enter_ADDING_CREDIT: PALM SCANNER flicker")
             self.neopixelManager.send(NeopixelCommands.SCANNER_FLICKER)
@@ -145,6 +147,7 @@ class MainMachine:
         # MOTOR ############################
         self.bubbleMotor.runSporadic()
         print('on_enter_FETCHING_FORTUNE: MOTOR: blow bubbles sporadicly')
+        self.neopixelManager.send(NeopixelCommands.MOTOR_RAINBOW)
 
         # PALM SCANNER ############################
         print("on_enter_FETCHING_FORTUNE: PALM SCANNER SCANNER_SCAN")
