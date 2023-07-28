@@ -58,19 +58,19 @@ class BubbleMotor:
     def runSporadic(self):
         self.MAX_ON_MS = 2000
         self.MAX_OFF_MS = 2000
-        self.MIN_INTERVAL_MS = 250
+        self.MIN_INTERVAL_MS = 500
 
         self.isRunning = True
-        self.pi_pwm.ChangeDutyCycle(40)
+        self.pi_pwm.ChangeDutyCycle(90)
         self.setOn()
 
     def runVerySporadic(self):
         self.MAX_ON_MS = 2000
         self.MAX_OFF_MS = 5000
-        self.MIN_INTERVAL_MS = 250
+        self.MIN_INTERVAL_MS = 500
         
         self.isRunning = True
-        self.pi_pwm.ChangeDutyCycle(30)
+        self.pi_pwm.ChangeDutyCycle(70)
 
     def run(self):
         self.runWithIntervals()
