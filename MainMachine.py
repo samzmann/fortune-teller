@@ -30,7 +30,7 @@ class MainMachine:
     def __init__(self) -> None:
 
         self.backgroundAudioPlayer = AudioPlayer()
-        self.backgroundAudioPlayer.volume(30)
+        self.backgroundAudioPlayer.volume(40)
         self.backgroundAudioPlayer.play_song('modules/audio_player/audio_files/elevator_background.mp3', loop=True)
         self.fortuneAudioPlayer = AudioPlayer(self.onCompleteFortuneReading)
 
@@ -101,7 +101,7 @@ class MainMachine:
         # AUDIO ############################
         # raise elevator music volume
         print("on_enter_ADDING_CREDIT: AUDIO: raise elevator music volume")
-        self.backgroundAudioPlayer.volume(30)
+        self.backgroundAudioPlayer.volume(40)
 
         
         # MOTOR ############################
